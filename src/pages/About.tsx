@@ -1,41 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Terminal, Code2, Globe } from 'lucide-react';
 import TeamMemberCard from '../components/TeamMemberCard';
 import { TeamMember } from '../types';
 
-const teamMembers: TeamMember[] = [
-  {
-    name: 'Alex Chen',
-    role: 'Founder & Lead Architect',
-    avatar: 'https://github.com/alex.png', // Placeholder
-    github: 'https://github.com/alex',
-    bio: 'Passionate about distributed systems and open source ecosystems.',
-  },
-  {
-    name: 'Sarah Jones',
-    role: 'Core Maintainer',
-    avatar: 'https://github.com/sarah.png', // Placeholder
-    github: 'https://github.com/sarah',
-    bio: 'Frontend wizard and UI/UX enthusiast. Building beautiful interfaces.',
-  },
-  {
-    name: 'Mike Ross',
-    role: 'DevOps Engineer',
-    avatar: 'https://github.com/mike.png', // Placeholder
-    github: 'https://github.com/mike',
-    bio: 'Automating everything. Kubernetes and CI/CD expert.',
-  },
-  {
-    name: 'Emily Wang',
-    role: 'Community Manager',
-    avatar: 'https://github.com/emily.png', // Placeholder
-    github: 'https://github.com/emily',
-    bio: 'Connecting developers and fostering a welcoming community.',
-  },
-];
-
 const About: React.FC = () => {
+  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch('https://api.github.com/orgs/OpenVertex/members');
+        if (!response.ok) throw new Error('Failed to fetch members');
+        const data = await response.json();
+        
+        const teamMembers: TeamMember[] = data.map((m: any) => ({
+          name: m.login,
+          role: 'Core Member',
+          avatar: m.avatar_url,
+          github: m.html_url,
+          bio: 'Building the future of Open Source.'
+        }));
+        
+        setMembers(teamMembers);
+      } catch (err) {
+        console.error(err);
+        setMembers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
       {/* Introduction Section */}
@@ -85,14 +84,28 @@ const About: React.FC = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold text-white mb-4">Our <span className="text-vertex-primary">Core Team</span></h2>
-          <p className="text-gray-400">The minds behind the code.</p>
+          <p className="text-gray-400 font-mono">// Found {members.length} active agents.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {teamMembers.map((member, index) => (
-            <TeamMemberCard key={index} member={member} index={index} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <div className="text-vertex-primary animate-pulse font-mono text-xl">
+              &gt; DECRYPTING_TEAM_DATA...
+            </div>
+          </div>
+        ) : members.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {members.map((member, index) => (
+              <TeamMemberCard key={index} member={member} index={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 font-mono mt-10">
+            // No public core members found.
+            <br />
+            <span className="text-xs text-vertex-highlight mt-2 block">[提示：组织成员需在 GitHub 组织设置中将身份设为“公开 (Public)”才能在此显示]</span>
+          </div>
+        )}
       </section>
     </div>
   );
