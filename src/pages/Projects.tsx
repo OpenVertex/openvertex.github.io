@@ -1,66 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard';
 import { Project } from '../types';
 
-const projects: Project[] = [
-  {
-    id: 'vertex-engine',
-    name: 'Vertex Engine',
-    description: 'A high-performance, distributed graph processing engine designed for large-scale social network analysis.',
-    language: 'Rust',
-    stars: 1245,
-    url: 'https://github.com/OpenVertex/vertex-engine',
-    tags: ['Distributed Systems', 'Graph Theory', 'Rust'],
-  },
-  {
-    id: 'neural-link',
-    name: 'Neural Link',
-    description: 'Lightweight neural network interface for edge devices with optimized tensor operations.',
-    language: 'C++',
-    stars: 892,
-    url: 'https://github.com/OpenVertex/neural-link',
-    tags: ['AI', 'Edge Computing', 'Neural Networks'],
-  },
-  {
-    id: 'quantum-ui',
-    name: 'Quantum UI',
-    description: 'A React component library implementing the Cyberpunk/Geek aesthetic with advanced animations.',
-    language: 'TypeScript',
-    stars: 2341,
-    url: 'https://github.com/OpenVertex/quantum-ui',
-    tags: ['React', 'UI Library', 'Animation'],
-  },
-  {
-    id: 'cyber-vault',
-    name: 'Cyber Vault',
-    description: 'Zero-knowledge encryption storage solution for decentralized applications.',
-    language: 'Go',
-    stars: 654,
-    url: 'https://github.com/OpenVertex/cyber-vault',
-    tags: ['Security', 'Encryption', 'Go'],
-  },
-  {
-    id: 'nexus-protocol',
-    name: 'Nexus Protocol',
-    description: 'Next-generation peer-to-peer communication protocol for real-time collaboration tools.',
-    language: 'Rust',
-    stars: 432,
-    url: 'https://github.com/OpenVertex/nexus-protocol',
-    tags: ['P2P', 'Networking', 'Protocol'],
-  },
-  {
-    id: 'void-terminal',
-    name: 'Void Terminal',
-    description: 'A highly customizable, GPU-accelerated terminal emulator built for power users.',
-    language: 'Rust',
-    stars: 3102,
-    url: 'https://github.com/OpenVertex/void-terminal',
-    tags: ['Terminal', 'Productivity', 'GPU'],
-  },
-];
+interface GitHubRepo {
+  id: number;
+  name: string;
+  description: string;
+  language: string;
+  stargazers_count: number;
+  html_url: string;
+  topics: string[];
+}
 
 const Projects: React.FC = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('https://api.github.com/orgs/OpenVertex/repos?sort=updated&direction=desc');
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects');
+        }
+        const data: GitHubRepo[] = await response.json();
+        
+        const repoProjects: Project[] = data
+          .filter(repo => !repo.name.toLowerCase().includes('.github.io')) // Filter out the website repo if desired
+          .map(repo => ({
+            id: repo.name,
+            name: repo.name.replace(/-/g, ' ').toUpperCase(),
+            description: repo.description || 'No description provided.',
+            language: repo.language || 'Code',
+            stars: repo.stargazers_count,
+            url: repo.html_url,
+            tags: repo.topics && repo.topics.length > 0 ? repo.topics : [repo.language || 'Open Source']
+          }));
+        
+        setProjects(repoProjects);
+      } catch (err) {
+        console.error(err);
+        // Fallback to empty or error state, but user requested NO example data
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
       <div className="text-center mb-16">
@@ -81,11 +71,23 @@ const Projects: React.FC = () => {
         </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <div className="text-vertex-primary animate-pulse font-mono text-xl">
+            &gt; SYNCING_REPOSITORIES...
+          </div>
+        </div>
+      ) : projects.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 font-mono mt-10">
+          // No public repositories found.
+        </div>
+      )}
     </div>
   );
 };

@@ -31,68 +31,12 @@ const TeamSection: React.FC = () => {
           bio: 'Building the future of Open Source.'
         }));
 
-        // If no public members found, use fallback/stealth agents
-        if (teamMembers.length === 0) {
-          teamMembers = [
-            {
-              name: 'Vertex Prime',
-              role: 'System Architect',
-              avatar: 'https://avatars.githubusercontent.com/u/12345678?v=4', // Placeholder
-              github: 'https://github.com/OpenVertex',
-              bio: 'Initiating system protocols. Architecture design and core implementation.'
-            },
-            {
-              name: 'Ghost Shell',
-              role: 'Security Ops',
-              avatar: 'https://avatars.githubusercontent.com/u/87654321?v=4',
-              github: 'https://github.com/OpenVertex',
-              bio: 'System defense and encryption algorithms. Stealth mode active.'
-            },
-            {
-              name: 'Neon Walker',
-              role: 'Frontend Wizard',
-              avatar: 'https://avatars.githubusercontent.com/u/11223344?v=4',
-              github: 'https://github.com/OpenVertex',
-              bio: 'Crafting visual interfaces and user experiences in the digital realm.'
-            }
-          ];
-        }
-        
         setMembers(teamMembers);
       } catch (err) {
         console.error(err);
         setError('Failed to load member data from Neural Network.');
         // Fallback data if API fails
-        setMembers([
-          {
-            name: 'Alex Chen',
-            role: 'Founder & Lead Architect',
-            avatar: 'https://github.com/alex.png',
-            github: 'https://github.com/alex',
-            bio: 'Passionate about distributed systems and open source ecosystems.',
-          },
-          {
-            name: 'Sarah Jones',
-            role: 'Core Maintainer',
-            avatar: 'https://github.com/sarah.png',
-            github: 'https://github.com/sarah',
-            bio: 'Frontend wizard and UI/UX enthusiast. Building beautiful interfaces.',
-          },
-          {
-            name: 'Mike Ross',
-            role: 'DevOps Engineer',
-            avatar: 'https://github.com/mike.png',
-            github: 'https://github.com/mike',
-            bio: 'Automating everything. Kubernetes and CI/CD expert.',
-          },
-          {
-            name: 'Emily Wang',
-            role: 'Community Manager',
-            avatar: 'https://github.com/emily.png',
-            github: 'https://github.com/emily',
-            bio: 'Connecting developers and fostering a welcoming community.',
-          },
-        ]);
+        setMembers([]);
       } finally {
         setLoading(false);
       }
