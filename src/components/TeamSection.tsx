@@ -61,6 +61,11 @@ const TeamSection: React.FC = () => {
             // Accessing personnel database...
             <br />
             // Found {members.length} active agents.
+            {members.length === 0 && (
+              <span className="block mt-2 text-vertex-highlight text-sm">
+                [TIP: Members must set visibility to "Public" in GitHub Org settings to appear here]
+              </span>
+            )}
           </p>
         </motion.div>
 

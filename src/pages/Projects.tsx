@@ -27,7 +27,6 @@ const Projects: React.FC = () => {
         const data: GitHubRepo[] = await response.json();
         
         const repoProjects: Project[] = data
-          .filter(repo => !repo.name.toLowerCase().includes('.github.io')) // Filter out the website repo if desired
           .map(repo => ({
             id: repo.name,
             name: repo.name.replace(/-/g, ' ').toUpperCase(),
