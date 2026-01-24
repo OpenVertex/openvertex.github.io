@@ -63,7 +63,7 @@ const TeamSection: React.FC = () => {
             // Found {members.length} active agents.
             {members.length === 0 && (
               <span className="block mt-2 text-vertex-highlight text-sm">
-                [TIP: Members must set visibility to "Public" in GitHub Org settings to appear here]
+                [提示：组织成员需在 GitHub 组织设置中将身份设为“公开 (Public)”才能在此显示]
               </span>
             )}
           </p>
