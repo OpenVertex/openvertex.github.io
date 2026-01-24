@@ -1,57 +1,59 @@
-# React + TypeScript + Vite
+# OpenVertex Official Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> We Build The Future of Open Source.
 
-Currently, two official plugins are available:
+![OpenVertex Banner](https://img.shields.io/website?url=https%3A%2F%2Fopenvertex.github.io%2F&label=Status&style=for-the-badge)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/OpenVertex/openvertex.github.io/deploy.yml?style=for-the-badge)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A Geek-style official website for OpenVertex organization, featuring Matrix/Terminal aesthetics, Glitch effects, and dynamic member showcase.
 
-## Expanding the ESLint configuration
+**Live Demo:** [https://openvertex.github.io/](https://openvertex.github.io/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Tech Stack
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Framework:** React + TypeScript + Vite
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **Deployment:** GitHub Pages (via GitHub Actions)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Matrix Rain Background:** Custom canvas implementation of the classic digital rain effect.
+- **Glitch Text Effects:** Cyberpunk-inspired text animations.
+- **Dynamic Team Section:** Automatically fetches and displays organization members from GitHub API.
+- **Responsive Design:** Fully optimized for mobile, tablet, and desktop.
+- **Dark Mode:** Immersive dark theme with neon green accents.
 
-export default tseslint.config({
-  extends: [
-    // other configs...
-    // Enable lint rules for React
-    reactX.configs['recommended-typescript'],
-    // Enable lint rules for React DOM
-    reactDom.configs.recommended,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 📦 Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/OpenVertex/openvertex.github.io.git
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+
+## 🚢 Deployment
+
+This project is configured to automatically deploy to GitHub Pages when changes are pushed to the `main` branch.
+
+- **Workflow:** `.github/workflows/deploy.yml`
+- **Configuration:** `vite.config.ts` (base: '/')
+
+## 📄 License
+
+MIT © OpenVertex
